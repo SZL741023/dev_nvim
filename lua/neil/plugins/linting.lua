@@ -3,6 +3,18 @@ return {
   event = { "BufReadPre", "BufNewFile" },
   config = function()
     local lint = require("lint")
+    local eslint = lint.linters.eslint_d
+
+    eslint.args = {
+      "--no-warn-ignored", -- <-- this is the key argument
+      "--format",
+      "json",
+      "--stdin",
+      "--stdin-filename",
+      function()
+        return vim.api.nvim_buf_get_name(0)
+      end,
+    }
 
     lint.linters_by_ft = {
       javascript = { "eslint_d" },
